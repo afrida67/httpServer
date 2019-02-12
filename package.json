@@ -1,11 +1,22 @@
 {
-  "name": "simple_server",
+  "name": "stu_db-http",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Afrida",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afridaaesha-dsi/StudentDB_httpServer.git"
+  },
+  "keywords": [
+    "node.js"
+  ],
+  "bugs": {
+    "url": "https://github.com/afridaaesha-dsi/StudentDB_httpServer/issues"
+  },
+  "homepage": "https://github.com/afridaaesha-dsi/StudentDB_httpServer#readme",
+  "description": ""
 }
