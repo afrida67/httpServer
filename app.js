@@ -3,18 +3,18 @@ const port = 3000;
 const server = http.createServer();
 const { parse } = require('querystring');
 
-server.on("request", (req, res) => {
+server.on('request', (req, res) => {
     if (req.method === 'POST'){
         let body = '';
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
-    req.on('end', () => {
-        console.log(
-            parse(body)
-        );
-        res.end('Saved to Database');
-    });
+        req.on('data', chunk => {
+            body += chunk.toString();
+        });
+        req.on('end', () => {
+            console.log(
+                parse(body)
+            );
+            res.end('Saved to Database');
+        });
    }
    else{
        res.end(`
