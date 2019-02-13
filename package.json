@@ -18,5 +18,8 @@
     "url": "https://github.com/afridaaesha-dsi/StudentDB_httpServer/issues"
   },
   "homepage": "https://github.com/afridaaesha-dsi/StudentDB_httpServer#readme",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
 }
