@@ -1,16 +1,31 @@
-### Student Database
+## **Simple Http Server**
 
-Simple server with node.js with the database MySQL
+A very basic **http server** built with **Node.js** and **MySQL** database.
+#### Feature :
+  - Basic CRUD operations
 
-  - Create
-  - Read
-  - Update
-  - Delete
-
-
-Go to this address : 
-
+#### Installation : 
 ```sh
-127.0.0.1:3000
+npm install
+npm start
 ```
+#### Usage : 
 
+**Insert :**
+```sh
+   'http://localhost:3000/'
+  ```
+**Get :**
+```sh
+  http://localhost:3000/get?id=<int>
+   ```
+**Delete :**
+ ```sh
+ http://localhost:3000/delete?id=<int>
+  ```
+ 
+**Update :** 
+ ```sh
+  http://localhost:3000/update?name=<string>&id=<int>
+   ```
+ 

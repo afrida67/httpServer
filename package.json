@@ -1,7 +1,7 @@
 {
   "name": "stu_db-http",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js"
@@ -15,8 +15,8 @@
   "keywords": [
     "node.js",
     "javascript",
-     "rest api",
-     "http"
+    "rest api",
+    "http"
   ],
   "bugs": {
     "url": "https://github.com/afridaaesha-dsi/StudentDB_httpServer/issues"
