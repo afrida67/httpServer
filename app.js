@@ -45,7 +45,7 @@ server.on('request', (req, res) => {
 
         req.on('end', () => {   
             let id= reqUrl.query.id;                      
-            let sql = "Select * from students where id=" + id;     
+            let sql = `Select * from students where id= ${id}`;     
             con.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log(result);
@@ -57,7 +57,7 @@ server.on('request', (req, res) => {
 
             req.on('end', () => { 
                 let id= reqUrl.query.id;                        
-                let sql = "Delete from students where id=" + id;     
+                let sql = `Delete from students where id= ${id}`;     
                 con.query(sql, function (err, result) {
                     if (err) throw err;
                     console.log(result);
@@ -68,7 +68,11 @@ server.on('request', (req, res) => {
     else if (reqUrl.pathname === '/update'){
 
         req.on('end', () => { 
-            let sql = "UPDATE students SET name = 'Moyna' WHERE grade = 56";    
+           // let sql = "UPDATE students SET name = 'Moyna' WHERE grade = 56";
+           let name= reqUrl.query.name;
+          // let grade= reqUrl.query.grade;
+
+           let sql = `UPDATE students SET name= ${name} WHERE id= 14`;    
             con.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log(result);
@@ -86,7 +90,6 @@ server.on('request', (req, res) => {
              Roll <input type="number" name="grade" /><br />
                <button>Save</button>
            </form>
-
 
        </body>
        </html>
