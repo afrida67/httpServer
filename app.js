@@ -27,10 +27,10 @@ server.on('request', (req, res) => {
             body += chunk.toString();
         });
 
-        req.on('end', () => {           
+        req.on('end', () => {  
+
             let data = parse(body);              
-            //let sql = "INSERT INTO students (name, grade) VALUES (afrida, 4)";
-              let sql = `INSERT INTO students (name, grade) VALUES ('${data.name}',${data.grade})`;    
+            let sql = `INSERT INTO students (name, grade) VALUES ('${data.name}',${data.grade})`;    
 
                con.query(sql, function (err, result) {
                 if (err) throw err;
@@ -41,18 +41,41 @@ server.on('request', (req, res) => {
         
    }
 
-   else if (req.method === 'GET' && reqUrl.pathname === '/get'){
+   else if (reqUrl.pathname === '/get'){
 
-    req.on('end', () => {                        
-          let sql = "Select * from students where id = 12";     
-           con.query(sql, function (err, result) {
-            if (err) throw err;
-            console.log(result);
-            });
-            })
-        res.end();   
-}
-    
+        req.on('end', () => {   
+            let id= reqUrl.query.id;                      
+            let sql = "Select * from students where id=" + id;     
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                });
+                })
+            res.end();   
+    }
+    else if (reqUrl.pathname === '/delete'){
+
+            req.on('end', () => { 
+                let id= reqUrl.query.id;                        
+                let sql = "Delete from students where id=" + id;     
+                con.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    });
+                    })
+                res.end();   
+    }
+    else if (reqUrl.pathname === '/update'){
+
+        req.on('end', () => { 
+            let sql = "UPDATE students SET name = 'Moyna' WHERE grade = 56";    
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                });
+                })
+            res.end();   
+    }
    else{
        res.end(`
        <!doctype html>
@@ -64,10 +87,12 @@ server.on('request', (req, res) => {
                <button>Save</button>
            </form>
 
+
        </body>
        </html>
    `);
    }
+   
 });
 
 // Start server
