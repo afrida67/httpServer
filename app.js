@@ -20,18 +20,16 @@ server.on('request', (req, res) => {
         let body = '';
         req.on('data', chunk => {
             body += chunk.toString();
-           // body = JSON.stringify(body);
-
         });
 
-        req.on('end', () => {
-            console.log(parse(body));
-
-              //  let sql = "INSERT INTO students ('"+body.name+"') VALUES (?)";
-              let sql = "INSERT INTO students (name, grade) VALUES ('Afrida',67)";     
+        req.on('end', () => {           
+                let data = parse(body);
+               
+              //  let sql = "INSERT INTO students (name, grade) VALUES (afrida, 4)";
+              let sql = `INSERT INTO students (name, grade) VALUES ('${data.name}',${data.grade})`;     
                con.query(sql, function (err, result) {
                 if (err) throw err;
-                console.log("1 record inserted");
+                console.log(result);
                 });
                 })
             res.end('Saved to Database');
