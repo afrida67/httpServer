@@ -1,7 +1,6 @@
 'use strict';
 
 const http = require('http');
-const { parse } = require('querystring');
 const mysql = require('mysql');
 const url = require('url'); 
 
@@ -24,69 +23,74 @@ con.connect(function(err) {
 server.on('request', (req, res) => {
 
     const reqUrl = url.parse(req.url, true);
-    
-    //*** POST ***//
-    if (reqUrl.pathname === '/post'){
+    let path = reqUrl.pathname ;
 
-       req.on('end', () => {
+    switch(path) {
 
-        let name = reqUrl.query.name; 
-        let grade =  reqUrl.query.grade; 
-        let sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;    
+    //*** POST ***/
+        case '/post': 
+            req.on('end', () => {   
+                let name = reqUrl.query.name; 
+                let grade =  reqUrl.query.grade; 
+                let sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;    
+                                    
+                con.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    });
+                })
+                res.end('Saved to Database'); 
+                break;
 
-        con.query(sql, function (err, result) {
-            if (err) throw err;
-            console.log(result);
-            });
-            })
-        res.end('Saved to Database');  
-   }
-   //*** GET ***//
-   else if (reqUrl.pathname === '/get'){
-
+        //*** GET ***/
+        case '/get':
         req.on('end', () => {   
             let id = reqUrl.query.id;                      
-            let sql = `Select * from students  WHERE id= ${id} `; 
+            let sql = `Select * from students WHERE id= ${id}`;
 
             con.query(sql, function (err, result) {
                 if (err) throw err;
-                console.log(result);
+
+                if (!result.length){
+                    console.log(`Id doesn't exist`);
+                }
+                else console.log(result);
                 });
                 })
-            res.end('Showing Student Information');   
-    }
-     //*** DELETE ***//
-    else if (reqUrl.pathname === '/delete'){
+             res.end('Showing Student Information');   
+            break;
 
-        req.on('end', () => { 
+        //*** DELETE ***/
 
-            let id = reqUrl.query.id;                        
-            let sql = `Delete from students  WHERE id= ${id}`;  
+        case '/delete':
+            req.on('end', () => { 
+                let id = reqUrl.query.id;                        
+                let sql = `Delete from students  WHERE id= ${id}`;  
 
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });
-                })
-            res.end('Deletion Successful');   
-    }
-     //*** UPDATE ***//
-    else if (reqUrl.pathname === '/update'){
+                con.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    });
+                    })
+                res.end('Deletion Successful');  
+                break;
 
-        req.on('end', () => { 
-
-           let name = reqUrl.query.name;
-           let id = reqUrl.query.id;  
-           let sql = `UPDATE students SET name= '${name}' WHERE id= ${id}`;   
-
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });
-                })
-            res.end('DB has been updated');   
-    }
-   else {
+        //*** UPDATE ***/
+        case '/update':
+            req.on('end', () => { 
+                let name = reqUrl.query.name;
+                let id = reqUrl.query.id;  
+                let sql = `UPDATE students SET name= '${name}' WHERE id= ${id}`;   
+    
+                con.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log(result);
+                    });
+                    })
+                res.end('DB has been updated');  
+                break;
+  
+    default:
        res.end(`
 
        <!doctype html>
@@ -123,7 +127,7 @@ server.on('request', (req, res) => {
        </body>
        </html>
    `);
-   }
+ }
    
 });
 
