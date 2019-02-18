@@ -1,3 +1,6 @@
+CREATE DATABASE sys;
+USE sys;
+
 CREATE TABLE IF NOT EXISTS `students` (
   `id` int(5) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,

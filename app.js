@@ -25,32 +25,28 @@ server.on('request', (req, res) => {
 
     const reqUrl = url.parse(req.url, true);
     
-    //*** POST ***/
-    if (req.method === 'POST'){
-        let body = '';
-        req.on('data', chunk => {
-            body += chunk.toString();
-        });
+    //*** POST ***//
+    if (reqUrl.pathname === '/post'){
 
-        req.on('end', () => {  
+       req.on('end', () => {
 
-            let data = parse(body);              
-            let sql = `INSERT INTO students (name, grade) VALUES ('${data.name}',${data.grade})`;    
+        let name = reqUrl.query.name; 
+        let grade =  reqUrl.query.grade; 
+        let sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;    
 
-            con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });
-                })
-            res.end('Saved to Database');
-        
+        con.query(sql, function (err, result) {
+            if (err) throw err;
+            console.log(result);
+            });
+            })
+        res.end('Saved to Database');  
    }
-   //*** GET ***/
-   else if (req.method === 'GET' && reqUrl.pathname === '/get'){
+   //*** GET ***//
+   else if (reqUrl.pathname === '/get'){
 
         req.on('end', () => {   
             let id = reqUrl.query.id;                      
-            let sql = ` Select * from students  WHERE id= ${id} `; 
+            let sql = `Select * from students  WHERE id= ${id} `; 
 
             con.query(sql, function (err, result) {
                 if (err) throw err;
@@ -59,24 +55,26 @@ server.on('request', (req, res) => {
                 })
             res.end('Showing Student Information');   
     }
-     //*** DELETE ***/
+     //*** DELETE ***//
     else if (reqUrl.pathname === '/delete'){
 
-            req.on('end', () => { 
-                let id = reqUrl.query.id;                        
-                let sql = `Delete from students  WHERE id= ${id}`;  
+        req.on('end', () => { 
 
-                con.query(sql, function (err, result) {
-                    if (err) throw err;
-                    console.log(result);
-                    });
-                    })
-                res.end('Deletion Successful');   
+            let id = reqUrl.query.id;                        
+            let sql = `Delete from students  WHERE id= ${id}`;  
+
+            con.query(sql, function (err, result) {
+                if (err) throw err;
+                console.log(result);
+                });
+                })
+            res.end('Deletion Successful');   
     }
-     //*** UPDATE ***/
+     //*** UPDATE ***//
     else if (reqUrl.pathname === '/update'){
 
         req.on('end', () => { 
+
            let name = reqUrl.query.name;
            let id = reqUrl.query.id;  
            let sql = `UPDATE students SET name= '${name}' WHERE id= ${id}`;   
@@ -88,23 +86,39 @@ server.on('request', (req, res) => {
                 })
             res.end('DB has been updated');   
     }
-   else{
+   else {
        res.end(`
 
        <!doctype html>
        <html>
        <body>
-           <form action="/" method="post">
-             Name <input type="text" name="name" /><br />
-             Grade <input type="number" name="grade" /><br />
-               <button>Save</button>
+
+           <form action="/post" method="">
+                 Name <input type="text" name="name" /><br/>
+                 Grade <input type="number" name="grade" /><br/>
+                 <button>Save</button>
            </form>
 
+            <br>
+
            <form action="/get" method="get">
-           Id <input type="number" name="id" placeholder="Search" /><br />
-    
+                Enter User Id <input type="number" name="id" placeholder="Search" /><br/>
          </form>
 
+         <br>
+
+         <form action="/delete" method="">
+             Delete data <input type="number" name="id" placeholder="Enter" /><br/>
+         </form>
+
+         <br>
+
+         <form action="/update" method="">
+             Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
+             Enter ID <input type="number" name="id" placeholder="Id" /><br/>
+         <button>Update</button>
+       
+         </form>
 
        </body>
        </html>
