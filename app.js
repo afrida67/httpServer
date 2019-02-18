@@ -46,11 +46,11 @@ server.on('request', (req, res) => {
         
    }
    //*** GET ***/
-   else if (reqUrl.pathname === '/get'){
+   else if (req.method === 'GET' && reqUrl.pathname === '/get'){
 
         req.on('end', () => {   
             let id = reqUrl.query.id;                      
-            let sql = `Select * from students where id= ${id}`; 
+            let sql = ` Select * from students  WHERE id= ${id} `; 
 
             con.query(sql, function (err, result) {
                 if (err) throw err;
@@ -64,7 +64,7 @@ server.on('request', (req, res) => {
 
             req.on('end', () => { 
                 let id = reqUrl.query.id;                        
-                let sql = `Delete from students where id= ${id}`;  
+                let sql = `Delete from students  WHERE id= ${id}`;  
 
                 con.query(sql, function (err, result) {
                     if (err) throw err;
@@ -90,6 +90,7 @@ server.on('request', (req, res) => {
     }
    else{
        res.end(`
+
        <!doctype html>
        <html>
        <body>
@@ -98,6 +99,12 @@ server.on('request', (req, res) => {
              Grade <input type="number" name="grade" /><br />
                <button>Save</button>
            </form>
+
+           <form action="/get" method="get">
+           Id <input type="number" name="id" placeholder="Search" /><br />
+    
+         </form>
+
 
        </body>
        </html>
