@@ -3,6 +3,7 @@
 const http = require('http');
 const mysql = require('mysql');
 const url = require('url'); 
+const fs = require('fs');
 
 const port = 3000;
 
@@ -15,15 +16,16 @@ let con = mysql.createConnection({
     database: "sys"
     });
 
-con.connect(function(err) {
-    if (err) throw err;
-    console.log("Connected!");
-});
 
 server.on('request', (req, res) => {
 
     const reqUrl = url.parse(req.url, true);
     let path = reqUrl.pathname ;
+
+    con.connect(function(err) {
+        if (err) throw err;
+        console.log('Connected!');
+    });
 
     switch(path) {
 
@@ -60,7 +62,7 @@ server.on('request', (req, res) => {
              res.end('Showing Student Information');   
             break;
 
-        //*** DELETE ***/
+        //*** DELETE ***//
 
         case '/delete':
             req.on('end', () => { 
@@ -75,7 +77,8 @@ server.on('request', (req, res) => {
                 res.end('Deletion Successful');  
                 break;
 
-        //*** UPDATE ***/
+        //*** UPDATE ***//
+
         case '/update':
             req.on('end', () => { 
                 let name = reqUrl.query.name;
@@ -90,44 +93,23 @@ server.on('request', (req, res) => {
                 res.end('DB has been updated');  
                 break;
   
-    default:
-       res.end(`
+        default:
+        
+            fs.readFile('index.html', function(err, data){
+                if (err) {
+                res.writeHead(404);
+                res.write('File not found');
+                res.end();
+                }  else {
+                res.writeHead(200, {
+                    'Content-Type': 'text/html'
+                });
+                res.write(data.toString());
+                res.end();
+                }
+            });
 
-       <!doctype html>
-       <html>
-       <body>
-
-           <form action="/post" method="">
-                 Name <input type="text" name="name" /><br/>
-                 Grade <input type="number" name="grade" /><br/>
-                 <button>Save</button>
-           </form>
-
-            <br>
-
-           <form action="/get" method="get">
-                Enter User Id <input type="number" name="id" placeholder="Search" /><br/>
-         </form>
-
-         <br>
-
-         <form action="/delete" method="">
-             Delete data <input type="number" name="id" placeholder="Enter" /><br/>
-         </form>
-
-         <br>
-
-         <form action="/update" method="">
-             Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
-             Enter ID <input type="number" name="id" placeholder="Id" /><br/>
-         <button>Update</button>
-       
-         </form>
-
-       </body>
-       </html>
-   `);
- }
+  }
    
 });
 
