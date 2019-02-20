@@ -2,7 +2,7 @@
 
 A very basic **http server** built with **Node.js** and **MySQL** database.
 #### Feature :
-  - Basic CRUD operations
+  - Basic CRUD operations via REST API
 
 #### Installation : 
 ```sh

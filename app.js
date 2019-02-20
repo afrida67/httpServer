@@ -73,11 +73,12 @@ server.on('request', (req, res) => {
                         console.log(`404 not found`);
     
                     } else {
-                        res.writeHead(200);
-                     //   res.write(`Showing Student Information`); 
-                        res.write(`Showing the student information`); 
+                        let string = JSON.stringify(result);
+                        let json = JSON.parse(string);
+                        res.writeHead(200); 
+                        res.write(`Showing the student information : name: ${json[0].name}, grade : ${json[0].grade}`); 
                         res.end();
-                        console.log(result);
+                        console.log(`name: ${json[0].name}, grade : ${json[0].grade}`);
                     } 
                 }
              });                    
