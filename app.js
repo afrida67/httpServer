@@ -16,13 +16,9 @@ let con = mysql.createConnection({
     database: "sys"
     });
 
-    con.connect(function(err) {
-        if (err) throw err;
-        console.log('Connected!');
-    });
 
 server.on('request', (req, res) => {
-
+    
     const reqUrl = url.parse(req.url, true);
 
     let path = reqUrl.pathname ;
@@ -33,23 +29,25 @@ server.on('request', (req, res) => {
 
     switch(path) {
 
-    //*** POST ***/
+    //*** POST ***//
         case '/post': 
   
-            sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;    
-                                    
+            sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;   
+
+
             con.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log(result);
-                });
-
+                });          
+    
                 res.end('Saved to Database'); 
                 break;
 
-        //*** GET ***/
+        //*** GET ***//
         case '/get':
                     
             sql = `Select * from students WHERE id= ${id}`;
+
 
             con.query(sql, function (err, result) {
                 if (err) throw err;
@@ -59,8 +57,9 @@ server.on('request', (req, res) => {
                 }
                 else console.log(result);
                 });
+            
 
-             res.end('Showing Student Information');   
+             res.end('Showing Student Information');           
              break;
 
         //*** DELETE ***//
@@ -68,13 +67,12 @@ server.on('request', (req, res) => {
         case '/delete':
                         
             sql = `Delete from students  WHERE id= ${id}`;  
-
             con.query(sql, function (err, result) {
                 if (err) throw err;
                 console.log(result);
                 });
-
-                res.end('Deletion Successful');  
+           
+                res.end('Deletion Successful'); 
                 break;
 
         //*** UPDATE ***//
@@ -87,7 +85,7 @@ server.on('request', (req, res) => {
                 if (err) throw err;
                 console.log(result);
                 });
-
+           
                 res.end('DB has been updated');  
                 break;
   
@@ -106,7 +104,6 @@ server.on('request', (req, res) => {
                 res.end();
                 }
             });
-
   }
    
 });
