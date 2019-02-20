@@ -4,6 +4,7 @@ const http = require('http');
 const mysql = require('mysql');
 const url = require('url'); 
 const fs = require('fs');
+const { parse } = require('querystring');
 
 const port = 3000;
 
@@ -34,32 +35,52 @@ server.on('request', (req, res) => {
   
             sql = `INSERT INTO students (name, grade) VALUES ('${name}',${grade})`;   
 
-
             con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });          
-    
-                res.end('Saved to Database'); 
-                break;
+                if (err) {
+                    console.log(err);
+                    res.writeHead(500);
+                    res.write('Server failed to connect'); 
+                    res.end();
+                }
+                else {
+                    console.log(result);
+                    console.log(`New Id Created: ${name} ${grade}`);
+                    
+                    res.writeHead(200);
+                    res.write(`New Student name : ${name} and grade : ${grade}`);
+                    res.end(); 
+                 }
+             });   
+            break;
 
         //*** GET ***//
         case '/get':
                     
             sql = `Select * from students WHERE id= ${id}`;
 
-
             con.query(sql, function (err, result) {
-                if (err) throw err;
-
-                if (!result.length){
-                    console.log(`Id doesn't exist`);
+                if (err){
+                    console.log(err);
+                    res.writeHead(500);
+                    res.write('Server failed to connect'); 
+                    res.end();
                 }
-                else console.log(result);
-                });
-            
 
-             res.end('Showing Student Information');           
+                else {
+                    if (!result.length){
+                        res.writeHead(404);
+                        res.write(`Id doesn't exist, enter valid id`);
+                        res.end();
+                        console.log(`404 not found`);
+    
+                    } else {
+                        res.writeHead(200);
+                        res.write('Showing Student Information'); 
+                        res.end();
+                        console.log(result);
+                    } 
+                }
+             });                    
              break;
 
         //*** DELETE ***//
@@ -68,11 +89,28 @@ server.on('request', (req, res) => {
                         
             sql = `Delete from students  WHERE id= ${id}`;  
             con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });
-           
-                res.end('Deletion Successful'); 
+                if (err) {
+                    console.log(err);
+                    res.writeHead(500);
+                    res.write('Server failed to connect'); 
+                    res.end();
+                } else {
+
+                        if (result.affectedRows == 0){
+                            res.writeHead(404);
+                            res.write(`Id doesn't exist, enter valid id`);
+                            res.end();
+                            console.log(`404 not found`);
+        
+                        } else {
+                            res.writeHead(200);
+                            res.write('Deletion Successful'); 
+                            res.end();
+                            console.log('Deleted');
+                        }
+                   }                              
+                });           
+   
                 break;
 
         //*** UPDATE ***//
@@ -82,12 +120,29 @@ server.on('request', (req, res) => {
             sql = `UPDATE students SET name= '${name}' WHERE id= ${id}`;   
     
             con.query(sql, function (err, result) {
-                if (err) throw err;
-                console.log(result);
-                });
-           
-                res.end('DB has been updated');  
-                break;
+                if (err){
+                    console.log(err);
+                    res.writeHead(500);
+                    res.write('Server failed to connect'); 
+                    res.end();
+                    
+                } else {
+                    if (result.affectedRows == 0){
+                        res.writeHead(404);
+                        res.write(`Id doesn't exist, enter valid id`);
+                        res.end();
+                        console.log(`404 not found`);
+    
+                    } else {
+                        console.log(result);  
+                        res.writeHead(200);
+                        res.write(`Updated name: ${name}`);                             
+                        res.end(); 
+                    }
+                }               
+            });
+ 
+            break;
   
         default:
         

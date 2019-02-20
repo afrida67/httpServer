@@ -9,13 +9,12 @@ A very basic **http server** built with **Node.js** and **MySQL** database.
 npm install
 npm start
 ```
-#### Usage : 
 
-**Insert :**
+**Request Handle :**
 ```sh
-   'http://localhost:3000/'
+   http://localhost:3000/
   ```
-**Get :**
+**Search :**
 ```sh
   http://localhost:3000/get?id=<int>
    ```
