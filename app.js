@@ -4,7 +4,6 @@ const http = require('http');
 const mysql = require('mysql');
 const url = require('url'); 
 const fs = require('fs');
-const { parse } = require('querystring');
 
 const port = 3000;
 
@@ -39,7 +38,7 @@ server.on('request', (req, res) => {
                 if (err) {
                     console.log(err);
                     res.writeHead(500);
-                    res.write('Server failed to connect'); 
+                    res.write(`Server failed to connect`); 
                     res.end();
                 }
                 else {
@@ -62,7 +61,7 @@ server.on('request', (req, res) => {
                 if (err){
                     console.log(err);
                     res.writeHead(500);
-                    res.write('Server failed to connect'); 
+                    res.write(`Server failed to connect`); 
                     res.end();
                 }
 
@@ -75,7 +74,8 @@ server.on('request', (req, res) => {
     
                     } else {
                         res.writeHead(200);
-                        res.write('Showing Student Information'); 
+                     //   res.write(`Showing Student Information`); 
+                        res.write(`Showing the student information`); 
                         res.end();
                         console.log(result);
                     } 
@@ -104,9 +104,9 @@ server.on('request', (req, res) => {
         
                         } else {
                             res.writeHead(200);
-                            res.write('Deletion Successful'); 
+                            res.write(`Deletion Successful`); 
                             res.end();
-                            console.log('Deleted');
+                            console.log(`Deleted`);
                         }
                    }                              
                 });           
@@ -123,9 +123,9 @@ server.on('request', (req, res) => {
                 if (err){
                     console.log(err);
                     res.writeHead(500);
-                    res.write('Server failed to connect'); 
+                    res.write(`Server failed to connect`); 
                     res.end();
-                    
+
                 } else {
                     if (result.affectedRows == 0){
                         res.writeHead(404);
@@ -149,7 +149,7 @@ server.on('request', (req, res) => {
             fs.readFile('index.html', function(err, data){
                 if (err) {
                 res.writeHead(404);
-                res.write('File not found');
+                res.write(`File not found`);
                 res.end();
                 }  else {
                 res.writeHead(200, {
