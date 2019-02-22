@@ -1,43 +1,58 @@
 <!DOCTYPE html>
-       <html>
+    <html>
        <body>
+            <head>
+                  <style>
 
-        <h2>Create New Student Account</h2>
+                  .button {
+                        background-color: #4CAF50;
+                        border: none;
+                        color: white;
+                        padding: 4px 12px;
+                        text-align: center;
+                        display: inline-block;
+                        font-size: 16px;
+                        cursor: pointer;
+                    }
+                  </style>
+            </head>
 
-           <form action="/post">
-                 Name <input type="text" name="name" /><br/>
-                 Grade <input type="number" name="grade" /><br/>
-                 <br>
-                 <button>Save</button>
-           </form>
+                <h2>Create New Student Account</h2>
 
-            <br>
+                <form action="/post">
+                        Name <input type="text" name="name" /><br/>
+                        Grade <input type="number" name="grade" /><br/>
+                        <br>
+                        <button class="button">Save</button>
+                </form>
 
-        <h2>Seacrh a Student</h2>
+                    <br>
 
-           <form action="/get">
-                Enter User Id <input type="number" name="id" placeholder="Search" /><br/>
-         </form>
+                <h2>Seacrh a Student</h2>
 
-         <br>
+            <form action="/get">
+                        Enter User Id <input type="number" name="id" placeholder="Search" /><br/>
+             </form>
 
-         <h2>Delete a Student</h2>
+                <br>
 
-         <form action="/delete">
-             Delete data <input type="number" name="id" placeholder="Enter" /><br/>
-         </form>
+                <h2>Delete a Student</h2>
 
-         <br>
+            <form action="/delete">
+                    Delete data <input type="number" name="id" placeholder="Enter" /><br/>
+             </form>
 
-         <h2>Update Student</h2>
+                <br>
 
-         <form action="/update">
-             Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
-             Enter ID <input type="number" name="id" placeholder="Id" /><br/>
-             <br>
-         <button>Update</button>
-       
-         </form>
+                <h2>Update Student</h2>
+
+             <form action="/update">
+                    Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
+                    Enter ID <input type="number" name="id" placeholder="Id" /><br/>
+                    <br>
+                <button class="button">Update</button>
+            
+            </form>
 
        </body>
-       </html>
+</html>

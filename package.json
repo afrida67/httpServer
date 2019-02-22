@@ -24,6 +24,7 @@
   "homepage": "https://github.com/afridaaesha-dsi/StudentDB_httpServer#readme",
   "description": "",
   "dependencies": {
-    "mysql": "^2.16.0"
+    "mysql": "^2.16.0",
+    "nodemon": "^1.18.10"
   }
 }

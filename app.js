@@ -191,7 +191,7 @@ server.on('request', (req, res) => {
                     res.end();
                 } else {
                     res.writeHead(200, {
-                        'Content-Type': 'text/html'
+                        'Content-Type': 'text/html', 
                     });
                     res.write(data.toString());
                     res.end();
