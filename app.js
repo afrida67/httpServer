@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
+
 app.set('view engine', 'ejs');
 
 app.get('/', (request, response) => {
@@ -79,11 +80,5 @@ app.delete('/delete/:id', (request, response) => {
     });
 });
 
-
-
-// Start the server
-const server = app.listen(port, (error) => {
-    if (error) return console.log(`Error: ${error}`);
-
-    console.log(`Server listening on port ${server.address().port}`);
-});
+// Start server
+app.listen(port, () => console.log(`Server listening on port ${port}`));
