@@ -19,40 +19,29 @@
 
                 <h2>Create New Student Account</h2>
 
-                <form action="/post">
-                        Name <input type="text" name="name" /><br/>
-                        Grade <input type="number" name="grade" /><br/>
-                        <br>
-                        <button class="button">Save</button>
-                </form>
+                    <form action="http://localhost:3000/api/post" method="post">
+                            Name <input type="text" name="name" /><br/>
+                            Grade <input type="number" name="grade" /><br/>
+                            <br>
+                            <button class="button">Save</button>
+                    </form>
 
                     <br>
 
                 <h2>Seacrh a Student</h2>
 
-            <form action="/get">
-                        Enter User Id <input type="number" name="id" placeholder="Search" /><br/>
-             </form>
-
+                    <form action="http://localhost:3000/api/get">
+                        Enter Student Id <input type="number" name="id" placeholder="Search" /><br/>
+                    </form>
                 <br>
 
-                <h2>Delete a Student</h2>
+              <h2>Delete a Student</h2>
 
-            <form action="/delete">
-                    Delete data <input type="number" name="id" placeholder="Enter" /><br/>
-             </form>
+                    <form action="http://localhost:3000/api/del" method="get">
+                            Delete data <input type="number" name="id" placeholder="Enter" /><br/>
+                    </form>
 
                 <br>
-
-                <h2>Update Student</h2>
-
-             <form action="/update">
-                    Update Name <input type="text" name="name" placeholder="Enter Name"/><br/>
-                    Enter ID <input type="number" name="id" placeholder="Id" /><br/>
-                    <br>
-                <button class="button">Update</button>
-            
-            </form>
 
        </body>
 </html>
