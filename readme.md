@@ -1,8 +1,8 @@
-## **Simple Http Server**
+## **Express**
 
-A very basic **http server** built with **Node.js** and **MySQL** database.
+Express server built with **Node.js** and **MySQL** database (without form).
 #### Feature :
-  - Basic CRUD operations via REST API
+  - Basic CRUD operations
 
 #### Installation : 
 ```sh
@@ -12,19 +12,19 @@ npm start
 
 **Request Handle :**
 ```sh
-   http://localhost:3000/
+   http://localhost:3000/api
   ```
 **Search :**
 ```sh
-  http://localhost:3000/get?id=<int>
+ http://localhost:3000/api/<id>
    ```
 **Delete :**
  ```sh
- http://localhost:3000/delete?id=<int>
+ curl -X DELETE http://localhost:3000/api/<id>
   ```
  
 **Update :** 
  ```sh
-  http://localhost:3000/update?name=<string>&id=<int>
+  curl -X PUT -d "name=test" -d "grade=12" http://localhost:3000/api/21
    ```
  

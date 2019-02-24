@@ -20,7 +20,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-app.set('view engine', 'ejs');
 
 app.get('/', (request, response) => {
     response.send({
@@ -29,7 +28,7 @@ app.get('/', (request, response) => {
 });
 
 // add a new student
-app.post('/api/post', (request, response) => {
+app.post('/api', (request, response) => {
     pool.query(`INSERT INTO students SET ?`, request.body, (err, result) => {
         if (err) throw err;
 
@@ -38,52 +37,37 @@ app.post('/api/post', (request, response) => {
 });
 
 // display a single student
-app.get('/api/get/:id?', (request, response) => {
-    const paramId = request.params.id;
-    const queryId = request.query.id;
-    let id;
+app.get('/api/:id', (request, response) => {
+    const id = request.params.id;
 
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
-
-    if(!id)
-        return response.send(`Please specify an id`);
-
-    pool.query(`SELECT * FROM students WHERE id = ${id}`, id, (err, result) => {
+    pool.query(`SELECT * FROM students WHERE id = ?`, id, (err, result) => {
         if (err) throw err;
-
         response.send(result);
     });
 });
 
 
 // delete a student id
-app.delete('/delete/:id', (request, response) => {
-    const paramId = request.params.id;
-    const queryId = request.query.id;
-    let id;
+app.delete('/api/:id', (request, response) => {
+    const id = request.params.id;
 
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
-
-    if(!id)
-        return response.send(`Please specify an id`);
-
-    pool.query(`DELETE FROM students WHERE id = ${id}`, id, (err, result) => {
+    pool.query(`DELETE FROM students WHERE id = ?`, id, (err, result) => {
         if (err) throw err;
-        response.send('ID deleted.');
+        response.send('Student deleted.');
     });
 });
 
+// update a student account
 
+app.put('/api/:id', (request, response) => {
+    const id = request.params.id;
 
-// Start the server
-const server = app.listen(port, (error) => {
-    if (error) return console.log(`Error: ${error}`);
+    pool.query(`UPDATE students SET ? WHERE id = ?`, [request.body, id], (err, result) => {
+        if (err) throw err;
 
-    console.log(`Server listening on port ${server.address().port}`);
+        response.send('Updated successfully.');
+    });
 });
+
+// Start server
+app.listen(port, () => console.log(`Server listening on port ${port}`));
