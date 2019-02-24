@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
+app.set('view engine', 'ejs');
 
 app.get('/', (request, response) => {
     response.send({
@@ -59,7 +60,7 @@ app.get('/api/get/:id?', (request, response) => {
 
 
 // delete a student id
-app.delete('/api/del/:id?', (request, response) => {
+app.delete('/delete/:id', (request, response) => {
     const paramId = request.params.id;
     const queryId = request.query.id;
     let id;
