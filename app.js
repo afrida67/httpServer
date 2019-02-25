@@ -1,84 +1,36 @@
-'use strict';
 const express = require('express');
-const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
-const mysql = require('mysql');
+const exphbs = require('express-handlebars');
+const logger = require('./middleware/logger');
+const students = require('./students');
 
-const port = 3000;
-
-const config = {
-    host: 'localhost',
-    user: 'root',
-    password: '123456',
-    database: 'sys',
-};
-
-const pool = mysql.createPool(config);
-
-//  body parsing middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
-
-app.set('view engine', 'ejs');
-
-app.get('/', (request, response) => {
-    response.send({
-        message: 'Create New Student Account'
-    });
-});
-
-// add a new student
-app.post('/api/post', (request, response) => {
-    pool.query(`INSERT INTO students SET ?`, request.body, (err, result) => {
-        if (err) throw err;
-
-        response.status(201).send(`User added with ID: ${result.insertId}`);
-    });
-});
-
-// display a single student
-app.get('/api/get/:id?', (request, response) => {
-    const paramId = request.params.id;
-    const queryId = request.query.id;
-    let id;
-
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
-
-    if(!id)
-        return response.send(`Please specify an id`);
-
-    pool.query(`SELECT * FROM students WHERE id = ${id}`, id, (err, result) => {
-        if (err) throw err;
-
-        response.send(result);
-    });
-});
+const PORT = process.env.PORT || 3000;
 
 
-// delete a student id
-app.delete('/delete/:id', (request, response) => {
-    const paramId = request.params.id;
-    const queryId = request.query.id;
-    let id;
+//init middleware
+app.use(logger);
 
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
+// Handlebars Middleware
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
+app.set('view engine', 'handlebars');
 
-    if(!id)
-        return response.send(`Please specify an id`);
+// body Parser Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
-    pool.query(`DELETE FROM students WHERE id = ${id}`, id, (err, result) => {
-        if (err) throw err;
-        response.send('ID deleted.');
-    });
-});
+// homepage Route
+app.get('/', (req, res) =>
+  res.render('index', {
+    title: 'Student Account',
+    students
+  })
+);
 
-// Start server
-app.listen(port, () => console.log(`Server listening on port ${port}`));
+// static folder
+app.use(express.static(path.join(__dirname, 'public')));
+
+// api Routes
+app.use('/api/students', require('./routes/api/students'));
+
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
