@@ -1,4 +1,3 @@
-// Load the MySQL pool connection
 const pool = require('../../database/config');
 const express = require('express');
 const router = express.Router();
@@ -29,21 +28,28 @@ router.get('/:id?', (req, res) => {
 // Create 
 router.post('/', (req, res) => {
 
-    pool.query('INSERT INTO students SET ?', req.body, (error, result) => {
-        if (error) throw error;
-        res.status(201).json({ msg: `User added with ID: ${result.insertId}`});
+    pool.query(`INSERT INTO students SET ?`, req.body, (err, result) => {
+        if (err) throw err;
+        res.status(201).json({ msg: `Student added with ID: ${result.insertId}`});
     });
 
 });
 // Update 
 router.put('/:id', (req, res) => {
 
-  
+    const id = req.params.id;
 
+    pool.query(`UPDATE students SET ? WHERE id = ?`, [req.body, id], (err, result) => {
+        if (err) throw err;
+        if (result.affectedRows == 0) {
+            return res.status(404).json({ msg: `ID not found`});
+        }
+        res.status(201).json({ msg: `Updated successfully`});
+    });
   });
 
-// Delete Member
-router.delete('/:id', (req, res) => {
+// Delete
+router.delete('/:id?', (req, res) => {
     const paramId = req.params.id;
     const queryId = req.query.id;
     let id;
@@ -56,12 +62,12 @@ router.delete('/:id', (req, res) => {
     if(!id)
         return res.send(`Please specify an id`);
 
-    pool.query(`DELETE FROM members WHERE id = ${id}`, id, (err, result) => {
+    pool.query(`DELETE FROM students WHERE id = ${id}`, id, (err, result) => {
         if (err) throw err;
-        if (!result.length) {
+        if (result.affectedRows == 0) {
             return res.status(404).json({ msg: `ID not found`});
         }
-        res.send(result);
+        res.status(201).json({ msg: `ID Deleted`});
     });
   });
 
