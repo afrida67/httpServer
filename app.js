@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 //init middleware
 app.use(logger);
 
+
 // Handlebars Middleware
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');

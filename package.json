@@ -24,7 +24,6 @@
   "homepage": "https://github.com/afridaaesha-dsi/StudentDB_httpServer#readme",
   "description": "",
   "dependencies": {
-    "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.2",
     "moment": "^2.24.0",
