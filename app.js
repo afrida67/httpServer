@@ -2,14 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const exphbs = require('express-handlebars');
-const logger = require('./middleware/logger');
+//const logger = require('./middleware/logger');
 const students = require('./students');
 
 const PORT = process.env.PORT || 3000;
 
 
 //init middleware
-app.use(logger);
+//app.use(logger);
 
 
 // Handlebars Middleware
