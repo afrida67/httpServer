@@ -1,6 +1,8 @@
 const pool = require('../../database/config');
 const express = require('express');
 const router = express.Router();
+const createError = require('http-errors');
+
 let check = false;
 
 //Middleware
@@ -9,11 +11,13 @@ router.use(function (req, res, next){
     pool.getConnection(function(err) {
       if (err) {
         res.status(500).json({ msg: `Server Down`});
+        return next(createError(503, 'Server Down'));
       } else {
         console.log(`Connected`);
+        //http-errors
         if(check === true){
             console.log('ID not found');
-            return res.status(404).json({ msg: `ID not found`});
+            return next(createError(404, 'Id does not exist!'));
         }
       }
     });
