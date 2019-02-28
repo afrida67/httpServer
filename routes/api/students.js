@@ -3,96 +3,79 @@ const express = require('express');
 const router = express.Router();
 const createError = require('http-errors');
 
-let check = false;
-
 //Middleware
-router.use(function (req, res, next){
-
-    pool.getConnection(function(err) {
-      if (err) {
-        res.status(500).json({ msg: `Server Down`});
-        return next(createError(503, 'Server Down'));
-      } else {
-        console.log(`Connected`);
-        //http-errors
-        if(check === true){
-            console.log('ID not found');
-            return next(createError(404, 'Id does not exist!'));
-        }
-      }
-    });
+router.use(function (err, req, res, next){
+    res.send(404, err.message);
     next();
-  });
+});
   
 // Get
-router.get('/:id?', (req, res) => {
-    const paramId = req.params.id;
-    const queryId = req.query.id;
-    let id;
+router.get('/:id', (req, res, next) => {
+    const id = req.params.id;
 
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
-
-    if(!id)
-        return res.send(`Please specify an id`);
-
-    pool.query(`SELECT * FROM students WHERE id = ${id}`, id, (err, result) => {
-            if (!result.length) {
-                check = true;
-                return;
+    pool.query(`SELECT * FROM students WHERE id =?`, id, (err, result) => {
+            if (err){
+                let err = new Error('Not Connected');
+                next(err);
+            } else {
+                    if (!result.length) {
+                        console.log('ID not found');
+                        return next(createError(404, 'Id does not exist!'));
+                    }
+                    res.send(result);
             }
-            res.send(result);
-        
     });
 });
 
 // Create 
-router.post('/', (req, res) => {
+router.post('/', (req, res, next) => {
 
     pool.query(`INSERT INTO students SET ?`, req.body, (err, result) => {
-
-        res.status(201).json({ msg: `Student added with ID: ${result.insertId}`});
+        if (err) {
+            let err = new Error('Not Connected');
+            next(err);
+        } else {
+            res.status(201).json({ msg: `Student added with ID: ${result.insertId}`});
+        }
     });
 
 });
 // Update 
-router.put('/:id', (req, res) => {
+router.put('/:id', (req, res, next) => {
 
     const id = req.params.id;
 
     pool.query(`UPDATE students SET ? WHERE id = ?`, [req.body, id], (err, result) => {
-        if (err) throw err;
-        if (result.affectedRows == 0) {
-            check = true;
-            return;
+        if (err) {
+            let err = new Error('Not Connected');
+            next(err);
+        } else {
+            if (result.affectedRows == 0) {
+                console.log('ID not found');
+                return next(createError(404, 'Id does not exist!'));
+            }
+            res.status(201).json({ msg: `Updated successfully`});
         }
-        res.status(201).json({ msg: `Updated successfully`});
+
     });
   });
 
 // Delete
-router.delete('/:id?', (req, res) => {
-    const paramId = req.params.id;
-    const queryId = req.query.id;
-    let id;
+router.delete('/:id', (req, res, next) => {
 
-    if(paramId && !queryId)
-        id = paramId;
-    else if(queryId && !paramId)
-        id = queryId;
+    const id = req.params.id;
 
-    if(!id)
-        return res.send(`Please specify an id`);
-
-    pool.query(`DELETE FROM students WHERE id = ${id}`, id, (err, result) => {
-        if (err) throw err;
-        if (result.affectedRows == 0) {
-            check = true;
-            return;
+    pool.query(`DELETE FROM students WHERE id = ?`, id, (err, result) => {
+        if (err) {
+            let err = new Error('Not Connected');
+            next(err);
+        } else {
+            if (result.affectedRows == 0) {
+                console.log('ID not found');
+                return next(createError(404, 'Id does not exist!'));
+            }
+            res.status(201).json({ msg: `ID Deleted`});
         }
-        res.status(201).json({ msg: `ID Deleted`});
     });
   });
 

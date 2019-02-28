@@ -2,15 +2,14 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const exphbs = require('express-handlebars');
-//const logger = require('./middleware/logger');
+const logger = require('./middleware/logger');
 const students = require('./students');
 
 const PORT = process.env.PORT || 3000;
 
 
-//init middleware
-//app.use(logger);
-
+//init middleware logger
+app.use(logger);
 
 // Handlebars Middleware
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -33,5 +32,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // api Routes
 app.use('/api/students', require('./routes/api/students'));
+
+//error middleware1
+app.use(function(req, res){
+  res.send(500, 'Unknown Error');
+});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
